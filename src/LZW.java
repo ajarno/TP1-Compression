@@ -2,17 +2,17 @@ import java.util.*;
 
 public class LZW {
 
-    int sizeOfFile = 0;
-    
     /**
      * Compress the given text according the LZW compression method
      * @param uncompressed the text uncompressed which is inside the txt file
      * @param sizeOfSymbol the size the user wants to allocate to each symbol
-     * @return the list of symbol constituting the compressed text 
+     * @return the list of symbol constituting the compressed text
      */
-    public List<Integer> compress(String uncompressed, int sizeOfSymbol) {
-        
+    public static String compress(String uncompressed, int sizeOfSymbol) {
+
         /******** Build the primary dictionary ********/
+
+        int sizeOfFile = 0;
 
         // Indicates the size of an initial dictionnary
         int dictSize = 257;
@@ -22,15 +22,15 @@ public class LZW {
 
         // Fill up the dictionnary with the already known symbols
         for (int i = 0; i < dictSize; i++) {
-            dictionary.put("" + (char)i, i);
+            dictionary.put(Character.toString((char)i), i);
         }
 
         /********* Complete the dictionary ***********/
- 
+
         // Init the latent code to nothing
         String latentCode = "";
 
-        // Build the list of symbol which will constitute the compressed text 
+        // Build the list of symbol which will constitute the compressed text
         List<Integer> result = new ArrayList<Integer>();
 
         // Read character by character the given text
@@ -64,50 +64,27 @@ public class LZW {
                 latentCode = Character.toString(readCode);
             }
         }
- 
-        // if (!latentCode.equals("")) {
-        //     result.add(dictionary.get(latentCode));
-        // }
-    
+
+         if (!latentCode.equals("")) {
+             result.add(dictionary.get(latentCode));
+         }
+
+        System.out.println(dictionary);
+
+        /** Add the size of the file at the end of the list ***/
+        result.add(sizeOfFile);
+
         /******* Return the list comprising the compressed text *********/
-        return result;
+        return turnResultIntoString(result);
     }
 
-    public int getSizeOfFile() { 
-
-        /***** Return the size of the file according the given size for one symbol ******/
-        return sizeOfFile ; 
-    }
-
-    
-    
-    
-    //Pour nous !!
-    public static String decompress(List<Integer> compressed) {
-        // Build the dictionary.
-        int dictSize = 256;
-        Map<Integer,String> dictionary = new HashMap<Integer,String>();
-        for (int i = 0; i < 256; i++)
-            dictionary.put(i, "" + (char)i);
- 
-        String w = "" + (char)(int)compressed.remove(0);
-        StringBuffer result = new StringBuffer(w);
-        for (int k : compressed) {
-            String entry;
-            if (dictionary.containsKey(k))
-                entry = dictionary.get(k);
-            else if (k == dictSize)
-                entry = w + w.charAt(0);
-            else
-                throw new IllegalArgumentException("Bad compressed k: " + k);
- 
-            result.append(entry);
- 
-            // Add w+entry[0] to the dictionary.
-            dictionary.put(dictSize++, w + entry.charAt(0));
- 
-            w = entry;
+    private static String turnResultIntoString(List<Integer> result) {
+        StringBuilder compressedText = new StringBuilder();
+        int i=0;
+        for (i=0; i < result.size()-1; i++) {
+            compressedText.append(result.get(i).toString());
         }
-        return result.toString();
+        compressedText.append("\nTaille du fichier compressé : ").append(result.get(i).toString());
+        return compressedText.toString();
     }
 }
