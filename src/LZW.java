@@ -79,12 +79,28 @@ public class LZW {
     }
 
     private static String turnResultIntoString(List<Integer> result) {
+
         StringBuilder compressedText = new StringBuilder();
-        int i=0;
+
+        int i;
         for (i=0; i < result.size()-1; i++) {
             compressedText.append(result.get(i).toString());
         }
-        compressedText.append("\nTaille du fichier compressé : ").append(result.get(i).toString());
+
+        Integer nbTaille = result.get(i);
+        compressedText.append("\nTaille du fichier compressé : \n")
+                .append(nbTaille.toString())
+                .append(" bits\n");
+        nbTaille /= 8;
+        compressedText.append(nbTaille.toString())
+                .append(" octets\n");
+        nbTaille /= 1024;
+        compressedText.append(nbTaille.toString())
+                .append(" Kio\n");
+        nbTaille /= 1024;
+        compressedText.append(nbTaille.toString())
+                .append(" Mio");
+
         return compressedText.toString();
     }
 }

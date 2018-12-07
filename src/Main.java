@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -7,14 +8,21 @@ public class Main {
 
     public static void main(String[] args) {
 
+        String filepath = JOptionPane.showInputDialog(null, "Quel est le fichier à compresser ? (Indiquez le path)","src/Bonjour.txt");
+        String nbByte = JOptionPane.showInputDialog(null, "Sur combien de bits voulez-vous coder chaque symbole ?", "12");
+
         try {
-            String uncompressed = new String(Files.readAllBytes(Paths.get("src/Bonjour.txt")));
-            System.out.println(uncompressed);
-            String compressed = LZW.compress(uncompressed,12);
-            System.out.println(compressed);
-            Files.write(Paths.get("src/Compress.txt"), compressed.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+            if ((filepath != null) && (filepath.length() > 0) && (nbByte != null) && (nbByte.length() > 0)) {
+
+                String uncompressed = new String(Files.readAllBytes(Paths.get(filepath)));
+                System.out.println(uncompressed);
+                String compressed = LZW.compress(uncompressed,Integer.parseInt(nbByte));
+                System.out.println(compressed);
+                Files.write(Paths.get("src/Compress.txt"), compressed.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }
