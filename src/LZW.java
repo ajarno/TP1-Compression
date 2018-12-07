@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.atomic.DoubleAccumulator;
 
 public class LZW {
 
@@ -87,7 +88,7 @@ public class LZW {
             compressedText.append(result.get(i).toString());
         }
 
-        Integer nbTaille = result.get(i);
+        Float nbTaille = Float.valueOf(result.get(i));
         compressedText.append("\nTaille du fichier compressé : \n")
                 .append(nbTaille.toString())
                 .append(" bits\n");
